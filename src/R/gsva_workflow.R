@@ -1,3 +1,5 @@
+# 公共入口可被项目 workflow 调用，也可直接作为 CLI 运行。
+main <- function(cli_args = commandArgs(trailingOnly = TRUE)) {
 #!/usr/bin/env Rscript
 
 # GSVA 独立分析入口
@@ -5,9 +7,9 @@
 
 # 功能：读取 --name value 形式的命令行参数。
 arg_value <- function(name, default = NULL) {
-  args <- commandArgs(trailingOnly = TRUE)
-  index <- match(name, args)
-  if (is.na(index) || index == length(args)) default else args[[index + 1L]]
+  args <- cli_args
+  index <- tail(which(args == name), 1L)
+  if (!length(index) || index == length(args)) default else args[[index + 1L]]
 }
 
 # 功能：从样本名推断 CON/EXP；已有分组列时不调用。
@@ -189,3 +191,6 @@ run_workflow(
   min_size = as.integer(arg_value("--min-size", "5")), max_size = as.integer(arg_value("--max-size", "500")),
   workers = as.integer(arg_value("--workers", "4")), top_n = as.integer(arg_value("--top-n", "12"))
 )
+
+}
+if (sys.nframe() == 0L) main()

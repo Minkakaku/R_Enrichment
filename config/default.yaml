@@ -1,0 +1,11 @@
+methods:
+  enrichment:
+    species: human
+    gene-col: gene
+    logfc-col: avg_log2FC
+    pvalue-col: p_val
+    padj-col: p_val_adj
+  gsva:
+    sample-col: sample
+    group-col: group
+    celltype-col: cell_type

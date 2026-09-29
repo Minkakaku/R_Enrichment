@@ -1,0 +1,17 @@
+name: r-enrichment
+channels:
+- conda-forge
+- bioconda
+dependencies:
+- r-base>=4.3
+- r-seurat>=5
+- r-ggplot2
+- r-pheatmap
+- bioconductor-gsva
+- bioconductor-gseabase
+- bioconductor-biocparallel
+- bioconductor-clusterprofiler
+- bioconductor-enrichplot
+- bioconductor-org.hs.eg.db
+- bioconductor-org.mm.eg.db
+- r-yaml

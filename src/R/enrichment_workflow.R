@@ -1,3 +1,5 @@
+# 公共入口可被项目 workflow 调用，也可直接作为 CLI 运行。
+main <- function(cli_args = commandArgs(trailingOnly = TRUE)) {
 #!/usr/bin/env Rscript
 
 # GO/KEGG ORA 与 preranked GSEA 独立入口
@@ -5,9 +7,9 @@
 
 # 功能：读取 --name value 命令行参数。
 arg_value <- function(name, default = NULL) {
-  args <- commandArgs(trailingOnly = TRUE)
-  index <- match(name, args)
-  if (is.na(index) || index == length(args)) default else args[[index + 1L]]
+  args <- cli_args
+  index <- tail(which(args == name), 1L)
+  if (!length(index) || index == length(args)) default else args[[index + 1L]]
 }
 
 # 功能：把 ggplot 同时保存为矢量 PDF 和 600 dpi PNG。
@@ -213,3 +215,6 @@ run_workflow(
   logfc_cutoff = as.numeric(arg_value("--logfc-cutoff", "0.25")),
   gsea_gmt = arg_value("--gsea-gmt", NULL), target_pathway = arg_value("--target-pathway", NULL)
 )
+
+}
+if (sys.nframe() == 0L) main()

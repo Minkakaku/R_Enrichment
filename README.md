@@ -1,27 +1,62 @@
-# R-Python-scores-enrichment-workflow-template
+# R_Enrichment
 
-独立评分与富集分析仓库。每个分析点是一个可直接运行的根目录完整脚本：
+跨项目复用的 R 公共分析代码库。仓库管理公共方法、默认配置、环境和项目示例；实际项目在 `projects/<项目名>/` 使用这些方法，数据和运行产物不提交 Git。
 
-- module_score_workflow.py：注释后 h5ad + GMT，计算 Scanpy module score，并按样本×细胞类型比较 CON/EXP。
-- gsva_workflow.R：注释后 Seurat RDS + GMT，先汇总样本×细胞类型表达，再运行 GSVA。
-- enrichment_workflow.R：差异表达 CSV，分开进行 Up/Down GO/KEGG ORA，并用全部可检验基因运行 preranked GSEA。
+本仓库由 `R-Python-scores-enrichment-workflow-template` 按语言拆分；另一语言版本见 [Python_Enrichment](https://github.com/Minkakaku/Python_Enrichment)。保留拆分前提交历史；`legacy/` 和 `source_catalog/` 是原样来源档案，可能包含另一语言，不参与正式执行。
 
-## Module score
+## 目录
 
-    python module_score_workflow.py --input annotated.h5ad --gmt signatures.gmt --output results/module_score --sample-col sample --group-col group --celltype-col cell_type
+```text
+src/R/       公共分析方法与配置加载器
+config/            公共默认参数与参考配置
+envs/              共享环境定义
+projects/project1/ 示例项目（未运行）
+  config/          项目覆盖、样本表、QC/注释等人工决策
+  workflow/        编号短脚本与分阶段 runner
+  data/processed/  中间对象
+  data/reference/  项目参考资源
+  results/         按分析点保存图表与中文说明
+  logs/            运行记录
+tests/             路径和项目配置检查
+```
 
-## GSVA
+## 新项目
 
-    Rscript gsva_workflow.R --input annotated.rds --gmt signatures.gmt --output results/gsva --sample-col sample --group-col group --celltype-col cell_type
+在仓库根目录执行：
 
-两种评分的组间统计均使用生物学样本汇总，不把单个细胞当作重复。delta_EXP_minus_CON > 0 表示 EXP 高。
+```bash
+conda env create -f envs/environment.yaml
+cp -R projects/project1 projects/my_project
+```
 
-## ORA 与 GSEA
+修改 `projects/my_project/config/config.yaml` 和样本/注释表，准备输入对象与参考文件。示例中的物种、reference、root、分组和文件名必须按真实项目核对，不能直接作为生物学结论。
 
-    Rscript enrichment_workflow.R --input differential_expression.csv --output results/enrichment --species human --gene-col gene --logfc-col avg_log2FC --pvalue-col p_val --padj-col p_val_adj
+每个编号脚本可单独执行；脚本从自身位置定位项目，因此复制后不会继续写入 project1。Python 包项目先完成 editable install。
 
-ORA 按 adjusted P 和 logFC 阈值拆分 Up/Down，使用全部可映射基因作为背景。GSEA 对全部可检验基因排序，不先按 DEG 显著性过滤。正 NES 表示 EXP 端富集，负 NES 表示 CON 端富集。
+```bash
+Rscript projects/my_project/workflow/10_enrichment.R
+```
 
-评分和富集都是转录层面的相对证据，不直接等于蛋白活性或代谢通量。旧 Streamlit、固定路径和细胞级伪重复脚本原样保存在 legacy/original/。
+可用步骤：
+- `10_enrichment.R`
+- `11_gsva.R`
 
-方法依据：GSVA（PMID: 23323831）、clusterProfiler（PMID: 22455463、34557778）及 Seurat/Scanpy 官方 module-score 文档。
+`run_all.sh` 对主流程只运行到 QC 检查点；独立分析方法需显式选择步骤，避免把不同候选方法混为同一条流程。已运行脚本不改写，重跑新增编号并使用新输出目录。
+
+## 配置与路径
+
+公共 `config/default.yaml` → `config/reference.yaml` → 项目 `config/config.yaml`，后者覆盖前者。嵌套映射按键合并，列表和标量整体替换。共享方法接收配置/参数，不包含实际项目路径与样本名。项目相对输入输出路径以项目目录为基准；参考文件路径写在配置中。
+
+## 结果与解释
+
+最终图保存同名 PNG/PDF，配套 CSV/TSV 和 `README_results_CN.md` 放在分析点结果目录。中间对象放在 `data/processed/`。细胞或空间 bins 不作为独立生物学重复；条件比较用样本级汇总。方法特有约束见 [AGENTS.md](AGENTS.md) 和公共代码注释。
+
+## 验证
+
+```bash
+Rscript tests/test_project.R
+```
+
+此检查验证配置、路径或安全导入，不运行真实组学分析。完整分析需要对应生信依赖、真实输入数据和人工 QC/注释。
+
+检查独立入口参数而不运行分析：`Rscript projects/my_project/workflow/10_enrichment.R --dry-run`。

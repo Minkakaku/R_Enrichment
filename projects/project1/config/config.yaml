@@ -1,0 +1,8 @@
+methods:
+  enrichment:
+    input: data/processed/differential_expression.csv
+    output: results/10_enrichment
+  gsva:
+    input: data/processed/annotated.rds
+    gmt: data/reference/signatures.gmt
+    output: results/11_gsva

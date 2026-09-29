@@ -1,7 +1,7 @@
 # Project data and generated outputs
-data/
-results/
-logs/
+/data/
+/results/
+/logs/
 docs/reports/*.html
 docs/reports/*.pdf
 
@@ -21,3 +21,19 @@ __pycache__/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Project data and generated artifacts
+.DS_Store
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+projects/*/data/**
+!projects/*/data/**/
+!projects/*/data/**/.gitkeep
+projects/*/results/**
+!projects/*/results/.gitkeep
+projects/*/logs/**
+!projects/*/logs/.gitkeep
+projects/*/docs/reports/**
+!projects/*/docs/reports/.gitkeep
