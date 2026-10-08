@@ -10,6 +10,8 @@ dependencies:
 - bioconductor-gsva
 - bioconductor-gseabase
 - bioconductor-biocparallel
+- bioconductor-aucell
+- bioconductor-summarizedexperiment
 - bioconductor-clusterprofiler
 - bioconductor-enrichplot
 - bioconductor-org.hs.eg.db

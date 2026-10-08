@@ -1,5 +1,7 @@
 # R_Enrichment
 
+项目代码提取的 `src/R/aucell_scores.R` 提供 `aucell_score_block(expr, gene_sets, auc_max_rank)` 和 `mask_aucell_zero_ranks()`：使用调用者指定的基因集与 cutoff，显式排除稀疏矩阵中的零表达排名，不继承特定项目的生物学标签。须在新 workflow 中显式 source，依赖 AUCell/BiocParallel；掩码检查可独立运行：`Rscript --vanilla tests/test_aucell_zero_ranks.R`。GSVA 默认 CON/EXP 颜色也已统一为 NPG。
+
 跨项目复用的 R 公共分析代码库。仓库管理公共方法、默认配置、环境和项目示例；实际项目在 `projects/<项目名>/` 使用这些方法，数据和运行产物不提交 Git。
 
 本仓库由 `R-Python-scores-enrichment-workflow-template` 按语言拆分；另一语言版本见 [Python_Enrichment](https://github.com/Minkakaku/Python_Enrichment)。保留拆分前提交历史；`legacy/` 和 `source_catalog/` 是原样来源档案，可能包含另一语言，不参与正式执行。

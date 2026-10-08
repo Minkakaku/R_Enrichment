@@ -113,8 +113,8 @@ plot_score_boxplots <- function(score_long, statistics, output_dir, top_n) {
       size = 1.4
     ) +
     ggplot2::facet_wrap(~pathway, scales = "free_y") +
-    ggplot2::scale_fill_manual(values = c(CON = "#72b1b9", EXP = "#f6ae00"), drop = FALSE) +
-    ggplot2::scale_color_manual(values = c(CON = "#72b1b9", EXP = "#f6ae00"), drop = FALSE) +
+    ggplot2::scale_fill_manual(values = c(CON = "#E64B35", EXP = "#4DBBD5"), drop = FALSE) +
+    ggplot2::scale_color_manual(values = c(CON = "#E64B35", EXP = "#4DBBD5"), drop = FALSE) +
     ggplot2::labs(x = NULL, y = "Sample-level GSVA score") +
     ggplot2::theme_classic(base_size = 12) +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 75, hjust = 1), legend.position = "top")

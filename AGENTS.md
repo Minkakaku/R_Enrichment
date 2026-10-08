@@ -10,7 +10,8 @@
 - 保留 QC 和人工注释检查点；不同候选方法不自动全部串行执行。
 - 目录变更同步更新安装配置、入口、说明和测试。默认不引入工作流引擎。
 - 所有 CON/EXP 统计在样本层面完成，不把细胞当生物学重复。
-- CON 使用 #72b1b9，EXP 使用 #f6ae00；delta 定义为 EXP-CON。
+- CON 使用 #E64B35，EXP 使用 #4DBBD5；delta 定义为 EXP-CON。
 - Up/Down 分开 ORA；GSEA 使用全部可检验基因排序。
 - 图成对保存 PNG/PDF，绘图数据和 README_results_CN.md 放同一输出目录。
 - legacy/original/ 和 source_catalog/ 保持原字节。
+- 项目目录统一使用小写 `projects/`；默认分类配色使用固定 NPG 色序，连续与双向数值使用 NPG 衍生渐变，项目显式配色可覆盖默认值。
